@@ -29,7 +29,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
           source: "build/libs/*.jar"
-          target: "/home/ubuntu/myapp/app.jar"
+          target: "/home/ubuntu/myapp/"
 
       - name: Restart App service
         uses: appleboy/ssh-action@v1.2.0
