@@ -1,4 +1,8 @@
 spring:
+  config:
+    import:
+      - application-security.yml
+
   datasource:
     url: jdbc:mysql://prod.cxy42iu4uqca.ap-northeast-2.rds.amazonaws.com:3306/prod?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: admin
@@ -14,6 +18,7 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
     open-in-view: false
+
 
 logging:
   level:
