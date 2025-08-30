@@ -29,7 +29,7 @@ class SwaggerConfig {
             .servers(
                 listOf(
                     Server()
-                        .url("https://api.tempick.com/")
+                        .url("https://api.tempick.net/")
                         .description("Production Server"),
                     Server()
                         .url("http://localhost:8080")
