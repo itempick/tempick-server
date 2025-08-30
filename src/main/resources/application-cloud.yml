@@ -1,0 +1,9 @@
+cloud:
+  aws:
+    region: ap-northeast-2
+    s3:
+      bucket: tempick-public-media-bucket
+    credentials:
+      access-key: ${AWS_ACCESS_KEY_ID}
+      secret-key: ${AWS_SECRET_ACCESS_KEY}
+    maxFileSize: 539276469

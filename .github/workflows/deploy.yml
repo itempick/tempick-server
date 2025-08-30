@@ -31,13 +31,22 @@ jobs:
           source: "build/libs/*.jar"
           target: "/home/ubuntu/myapp/"
 
-      - name: Restart App service
+      - name: Configure AWS credentials and restart App service
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
           script: |
+            echo ">>> Creating systemd drop-in for environment vars"
+            sudo mkdir -p /etc/systemd/system/myapp.service.d
+            cat << 'EOF' | sudo tee /etc/systemd/system/myapp.service.d/env.conf > /dev/null
+            [Service]
+            Environment=AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+            Environment=AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            EOF
+            echo ">>> Reloading systemd daemon"
+            sudo systemctl daemon-reload
             echo ">>> Restarting systemd service"
             sudo systemctl restart myapp
             sudo systemctl status myapp --no-pager -l

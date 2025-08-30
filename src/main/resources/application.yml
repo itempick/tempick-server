@@ -2,6 +2,7 @@ spring:
   config:
     import:
       - application-security.yml
+      - application-cloud.yml
 
   datasource:
     url: jdbc:mysql://prod.cxy42iu4uqca.ap-northeast-2.rds.amazonaws.com:3306/prod?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
@@ -11,7 +12,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     properties:
       hibernate:
         format_sql: true

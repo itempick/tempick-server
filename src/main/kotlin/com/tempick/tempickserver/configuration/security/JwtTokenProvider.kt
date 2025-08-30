@@ -1,5 +1,6 @@
 package com.tempick.tempickserver.configuration.security
 
+import com.tempick.tempickserver.configuration.properties.SecurityProperties
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm

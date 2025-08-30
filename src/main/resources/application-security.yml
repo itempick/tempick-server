@@ -16,3 +16,11 @@ app:
       - /v3/api-docs/**
       - /favicon.ico
       - /actuator/**
+      - /admin/**
+      - /app/**
+      - /common/**
+
+admin:
+  auth:
+    login-id: ${ADMIN_ID}
+    password: ${ADMIN_PASSWORD}
