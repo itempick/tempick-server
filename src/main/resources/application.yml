@@ -5,9 +5,9 @@ spring:
       - application-cloud.yml
 
   datasource:
-    url: jdbc:mysql://prod.cxy42iu4uqca.ap-northeast-2.rds.amazonaws.com:3306/prod?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: admin
-    password: rladudtjr1!
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
