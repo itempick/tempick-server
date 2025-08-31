@@ -1,5 +1,7 @@
 package com.tempick.tempickserver.application.admin
 
+import com.tempick.tempickserver.api.support.error.CoreException
+import com.tempick.tempickserver.api.support.error.ErrorType
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
@@ -19,7 +21,7 @@ object AdminUser {
             val requestAttributes = RequestContextHolder.getRequestAttributes() as? ServletRequestAttributes
             requestAttributes?.request
         } catch (e: Exception) {
-            null
+            throw CoreException(ErrorType.DEFAULT_ERROR, "Cannot get current request")
         }
     }
 }
