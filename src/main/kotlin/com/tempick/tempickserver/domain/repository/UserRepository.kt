@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface UserRepository: JpaRepository<User, Long> {
+interface UserRepository : JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.loginId = :loginId AND u.isActive = true")
     fun findByLoginId(loginId: String): User?
 
