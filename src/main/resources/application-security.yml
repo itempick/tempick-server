@@ -19,8 +19,3 @@ app:
       - /admin/**
       - /app/**
       - /common/**
-
-admin:
-  auth:
-    login-id: ${ADMIN_ID}
-    password: ${ADMIN_PASSWORD}
