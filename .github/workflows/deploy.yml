@@ -47,6 +47,8 @@ jobs:
             Environment=DB_URL=${{ secrets.DB_URL }}
             Environment=DB_USERNAME=${{ secrets.DB_USERNAME }}
             Environment=DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            Environment=ADMIN_ID=${{ secrets.ADMIN_ID }}
+            Environment=ADMIN_PASS=${{ secrets.ADMIN_PASS }}
             EOF
             echo ">>> Reloading systemd daemon"
             sudo systemctl daemon-reload

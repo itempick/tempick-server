@@ -25,8 +25,3 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type.descriptor.sql.BasicBinder: trace
-
-admin:
-  auth:
-    login-id: ${ADMIN_ID}
-    password: ${ADMIN_PASSWORD}
