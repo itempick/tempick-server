@@ -7,22 +7,13 @@ import jakarta.persistence.GenerationType.IDENTITY
 import jakarta.persistence.Id
 
 @Entity
-class MediaFile(
+class Post (
     @Id @GeneratedValue(strategy = IDENTITY)
-    val id: Long = 0L,
+    var id: Long = 0L,
 
     @Column(nullable = false)
-    val fileUrl: String,
+    var title: String,
 
     @Column(nullable = false)
-    val name: String,
-) : BaseDatetime() {
-    companion object {
-        fun create(fileUrl: String, name: String): MediaFile {
-            return MediaFile(
-                fileUrl = fileUrl,
-                name = name
-            )
-        }
-    }
-}
+    var content: String
+): BaseDatetime()

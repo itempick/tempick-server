@@ -27,9 +27,8 @@ class User (
 
     @Column
     val isActive: Boolean = true,
-) {
+) : BaseDatetime() {
     fun isPasswordMatch(rawPassword: String, encoder: PasswordEncoder): Boolean {
         return encoder.matches(rawPassword, this.password)
     }
-
 }

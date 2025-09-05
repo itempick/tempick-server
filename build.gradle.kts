@@ -45,7 +45,6 @@ dependencies {
 
     // env
     implementation("me.paulschwarz:spring-dotenv:4.0.0")
-
 }
 
 kotlin {
