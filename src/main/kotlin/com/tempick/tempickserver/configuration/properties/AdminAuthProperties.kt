@@ -6,6 +6,6 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 @ConfigurationProperties(prefix = "admin.auth")
 class AdminAuthProperties {
-    lateinit var loginId: String
+    lateinit var email: String
     lateinit var password: String
 }

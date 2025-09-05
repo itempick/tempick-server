@@ -22,5 +22,5 @@ app:
 
 admin:
   auth:
-    login-id: ${ADMIN_ID}
+    email: ${ADMIN_ID}
     password: ${ADMIN_PASSWORD}

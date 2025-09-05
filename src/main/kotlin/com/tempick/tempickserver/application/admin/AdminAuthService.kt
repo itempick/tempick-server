@@ -1,12 +1,14 @@
 package com.tempick.tempickserver.application.admin
 
-import com.tempick.tempickserver.api.rest.admin.dto.request.AdminLoginRequest
 import com.tempick.tempickserver.api.support.error.CoreException
 import com.tempick.tempickserver.api.support.error.ErrorType
+import com.tempick.tempickserver.application.admin.dto.AdminLoginData
 import com.tempick.tempickserver.configuration.properties.AdminAuthProperties
 import com.tempick.tempickserver.configuration.security.JwtTokenProvider
 import com.tempick.tempickserver.domain.entitiy.User
+import com.tempick.tempickserver.domain.entitiy.UserAuth
 import com.tempick.tempickserver.domain.enums.UserRole
+import com.tempick.tempickserver.domain.repository.UserAuthRepository
 import com.tempick.tempickserver.domain.repository.UserRepository
 import jakarta.annotation.PostConstruct
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class AdminAuthService(
     private val userRepository: UserRepository,
+    private val userAuthRepository: UserAuthRepository,
     private val passwordEncoder: PasswordEncoder,
     private val jwtTokenProvider: JwtTokenProvider,
     private val adminAuthProperties: AdminAuthProperties,
@@ -23,29 +26,34 @@ class AdminAuthService(
     @PostConstruct
     @Transactional
     fun initAdmin() {
-        if (!userRepository.existsByLoginId(adminAuthProperties.loginId)) {
+        if (!userAuthRepository.existsByLoginId(adminAuthProperties.email)) {
             val encoded = passwordEncoder.encode(adminAuthProperties.password)
-            val admin = User(
-                loginId = adminAuthProperties.loginId,
+            val adminProfile = User(
+                nickName = "관리자",
+            )
+            val savedProfile = userRepository.save(adminProfile)
+            val adminAuth = UserAuth(
+                email = adminAuthProperties.email,
                 password = encoded,
                 role = UserRole.ADMIN,
+                user = savedProfile,
             )
-            userRepository.save(admin)
+            userAuthRepository.save(adminAuth)
         }
     }
 
     @Transactional(readOnly = true)
-    fun login(request: AdminLoginRequest): String {
-        val user = userRepository.findByLoginId(request.loginId)
+    fun login(request: AdminLoginData): String {
+        val auth = userAuthRepository.findActiveByLoginId(request.email)
             ?: throw CoreException(ErrorType.USER_NOT_FOUND)
 
-        if (!user.isPasswordMatch(request.password, passwordEncoder)) {
+        if (!passwordEncoder.matches(request.password, auth.password)) {
             throw CoreException(ErrorType.INVALID_PASSWORD)
         }
 
         return jwtTokenProvider.createToken(
-            user.loginId,
-            "ROLE_${user.role.name}",
+            auth.email,
+            "ROLE_${auth.role.name}",
         )
     }
 }

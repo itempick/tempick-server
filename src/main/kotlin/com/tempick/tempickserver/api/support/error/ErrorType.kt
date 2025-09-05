@@ -40,4 +40,10 @@ enum class ErrorType(
         "파일 크기가 제한을 초과했습니다.",
         LogLevel.INFO,
     ),
+    VALIDATION_ERROR(
+        HttpStatus.BAD_REQUEST,
+        ErrorCode.E400,
+        "요청 값이 올바르지 않습니다.",
+        LogLevel.INFO,
+    ),
 }

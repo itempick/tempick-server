@@ -1,6 +1,6 @@
 package com.tempick.tempickserver.application.common
 
-import com.tempick.tempickserver.api.rest.common.dto.response.MediaResponse
+import com.tempick.tempickserver.application.common.dto.MediaResult
 import com.tempick.tempickserver.api.support.error.CoreException
 import com.tempick.tempickserver.api.support.error.ErrorType
 import com.tempick.tempickserver.configuration.properties.AwsS3Properties
@@ -38,7 +38,7 @@ class S3MediaUploader(
             .build()
     }
 
-    fun upload(file: MultipartFile): MediaResponse {
+    fun upload(file: MultipartFile): MediaResult {
         if (file.size > awsS3Properties.maxFileSize) {
             throw CoreException(ErrorType.FILE_SIZE_EXCEEDED)
         }
@@ -65,7 +65,7 @@ class S3MediaUploader(
             )
         )
 
-        return MediaResponse(imageUrl = mediaFile.fileUrl, originalFileName = originalFileName)
+        return MediaResult(imageUrl = mediaFile.fileUrl, originalFileName = originalFileName)
     }
 
     private fun generateFileName(original: String, folder: String = "image"): String {

@@ -1,6 +1,5 @@
 package com.tempick.tempickserver.configuration.security
 
-import com.tempick.tempickserver.domain.repository.UserRepository
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
@@ -8,18 +7,18 @@ import org.springframework.stereotype.Service
 
 @Service
 class CustomUserDetailsService(
-    private val userRepository: UserRepository,
+    private val userAuthRepository: com.tempick.tempickserver.domain.repository.UserAuthRepository,
 ) : UserDetailsService {
 
-    override fun loadUserByUsername(email: String): UserDetails {
-        val user = userRepository.findByLoginId(email)
-            ?: throw UsernameNotFoundException("사용자를 찾을 수 없습니다: $email")
+    override fun loadUserByUsername(loginId: String): UserDetails {
+        val auth = userAuthRepository.findActiveByLoginId(loginId)
+            ?: throw UsernameNotFoundException("사용자를 찾을 수 없습니다: $loginId")
 
         return CustomUserDetails(
-            id = user.id,
-            loginId = user.loginId,
-            password = user.password,
-            role = user.role,
+            id = auth.id,
+            loginId = auth.email,
+            password = auth.password,
+            role = auth.role,
         )
     }
 }

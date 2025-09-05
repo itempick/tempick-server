@@ -4,12 +4,14 @@ import com.tempick.tempickserver.api.rest.admin.dto.request.AdminLoginRequest
 import com.tempick.tempickserver.api.rest.admin.dto.respnose.AdminTokenResponse
 import com.tempick.tempickserver.api.support.response.RestResponse
 import com.tempick.tempickserver.application.admin.AdminAuthService
+import com.tempick.tempickserver.application.admin.dto.AdminLoginData
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.validation.Valid
 import org.springframework.http.MediaType
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.PostMapping
@@ -44,9 +46,10 @@ class AdminAuthController(
         ],
     )
     fun login(
-        @RequestBody request: AdminLoginRequest,
+        @RequestBody @Valid request: AdminLoginRequest,
     ): RestResponse<AdminTokenResponse> {
-        return RestResponse.success(AdminTokenResponse(adminAuthService.login(request)))
+        val data = AdminLoginData(email = request.email, password = request.password)
+        return RestResponse.success(AdminTokenResponse(adminAuthService.login(data)))
     }
 
 }
