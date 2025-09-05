@@ -1,22 +1,23 @@
 package com.tempick.tempickserver.domain.entitiy
 
-import jakarta.persistence.*
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType.IDENTITY
+import jakarta.persistence.Id
+import java.time.LocalDateTime
 
 @Entity
-class Post (
+class Banner(
     @Id @GeneratedValue(strategy = IDENTITY)
     var id: Long = 0L,
 
     @Column(nullable = false)
-    var title: String,
+    var bannerImageUrl: String,
 
     @Column(nullable = false)
-    var content: String,
-
-    @OneToMany(mappedBy = "post")
-    var comments: MutableSet<Comment> = mutableSetOf(),
+    val startedAt: LocalDateTime,
 
     @Column(nullable = false)
-    var isDeleted: Boolean = false,
+    val endedAt: LocalDateTime,
 ): BaseDatetime()

@@ -14,6 +14,9 @@ class Tag (
     @Column(unique = true)
     var name: String,
 
-    @Column
-    var adminOnly: Boolean = false,
+    @Column(nullable = false)
+    var color: String,
+
+    @Column(nullable = false)
+    var isDeleted: Boolean = false
 ): BaseDatetime()
