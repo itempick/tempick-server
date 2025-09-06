@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 
-@Tag(name = "이미지", description = "이미지 업로드 API")
+@Tag(name = "공통 이미지", description = "이미지 업로드 API")
 @RestController
 class ImageController(
     private val uploader: S3MediaUploader,

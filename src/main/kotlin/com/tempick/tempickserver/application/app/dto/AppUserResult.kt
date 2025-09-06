@@ -10,7 +10,7 @@ data class AppUserResult(
     companion object {
         fun from(entity: User): AppUserResult = AppUserResult(
             id = entity.id,
-            nickName = entity.nickName,
+            nickName = entity.nickname,
             profileImageUrl = entity.profileImageUrl,
         )
     }

@@ -1,6 +1,7 @@
 package com.tempick.tempickserver.domain.entitiy
 
 import com.tempick.tempickserver.domain.enums.UserRole
+import com.tempick.tempickserver.domain.enums.UserRole.USER
 import jakarta.persistence.*
 
 @Entity
@@ -16,7 +17,7 @@ class UserAuth(
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    val role: UserRole,
+    val role: UserRole = USER,
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

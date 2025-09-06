@@ -9,4 +9,8 @@ class UserRepositoryAdapter(
     private val jpa: UserJpaRepository
 ) : UserRepository {
     override fun save(user: User): User = jpa.save(user)
+
+    override fun existsByNickname(nickName: String): Boolean {
+        return jpa.existsUserByNickname(nickName)
+    }
 }

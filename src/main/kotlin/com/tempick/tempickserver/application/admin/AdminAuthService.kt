@@ -26,10 +26,10 @@ class AdminAuthService(
     @PostConstruct
     @Transactional
     fun initAdmin() {
-        if (!userAuthRepository.existsByLoginId(adminAuthProperties.email)) {
+        if (!userAuthRepository.existsByEmail(adminAuthProperties.email)) {
             val encoded = passwordEncoder.encode(adminAuthProperties.password)
             val adminProfile = User(
-                nickName = "관리자",
+                nickname = "관리자",
             )
             val savedProfile = userRepository.save(adminProfile)
             val adminAuth = UserAuth(
@@ -44,7 +44,7 @@ class AdminAuthService(
 
     @Transactional(readOnly = true)
     fun login(request: AdminLoginData): String {
-        val auth = userAuthRepository.findActiveByLoginId(request.email)
+        val auth = userAuthRepository.findActiveByEmail(request.email)
             ?: throw CoreException(ErrorType.USER_NOT_FOUND)
 
         if (!passwordEncoder.matches(request.password, auth.password)) {

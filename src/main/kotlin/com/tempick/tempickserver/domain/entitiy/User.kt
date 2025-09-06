@@ -8,7 +8,7 @@ class User (
     val id: Long = 0L,
 
     @Column(unique = true)
-    val nickName: String,
+    val nickname: String,
 
     @Column(nullable = true)
     var profileImageUrl: String? = null,

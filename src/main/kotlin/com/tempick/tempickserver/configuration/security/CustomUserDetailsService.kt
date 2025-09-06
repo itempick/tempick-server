@@ -11,7 +11,7 @@ class CustomUserDetailsService(
 ) : UserDetailsService {
 
     override fun loadUserByUsername(loginId: String): UserDetails {
-        val auth = userAuthRepository.findActiveByLoginId(loginId)
+        val auth = userAuthRepository.findActiveByEmail(loginId)
             ?: throw UsernameNotFoundException("사용자를 찾을 수 없습니다: $loginId")
 
         return CustomUserDetails(
