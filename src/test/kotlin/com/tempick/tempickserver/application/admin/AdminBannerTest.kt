@@ -15,7 +15,7 @@ import java.util.*
 
 class AdminBannerTest : StringSpec({
     val bannerRepository = mockk<BannerRepository>()
-    val adminBannerService = AdminBannerCommandService(bannerRepository)
+    val adminBannerService = AdminBannerService(bannerRepository)
 
     "배너 생성 성공 테스트" {
         val bannerData = AdminCreateBannerData(
@@ -32,7 +32,7 @@ class AdminBannerTest : StringSpec({
         every { bannerRepository.existsBannerByDisplaySequence(bannerData.displaySequence) } returns false
         every { bannerRepository.save(any()) } returns expectedBanner
 
-        val result = adminBannerService.createBanner(bannerData)
+        val result = adminBannerService.upsertBanner(bannerData)
 
         result shouldBe expectedBanner
     }
@@ -46,7 +46,7 @@ class AdminBannerTest : StringSpec({
         every { bannerRepository.existsBannerByDisplaySequence(bannerData.displaySequence) } returns true
 
         val exception = shouldThrow<CoreException> {
-            adminBannerService.createBanner(bannerData)
+            adminBannerService.upsertBanner(bannerData)
         }
 
         exception.message shouldBe ErrorType.BANNER_DISPLAY_SEQUENCE_ALREADY_EXISTS.message
@@ -78,7 +78,7 @@ class AdminBannerTest : StringSpec({
         every { bannerRepository.existsBannerByDisplaySequenceAndIdNot(bannerData.displaySequence, bannerId) } returns false
         every { bannerRepository.save(any()) } returns updatedBanner
 
-        val result = adminBannerService.updateBanner(bannerData)
+        val result = adminBannerService.upsertBanner(bannerData)
 
         result shouldBe updatedBanner
         verify { bannerRepository.findById(bannerId) }
@@ -96,7 +96,7 @@ class AdminBannerTest : StringSpec({
         every { bannerRepository.findById(bannerId) } returns Optional.empty()
 
         val exception = shouldThrow<CoreException> {
-            adminBannerService.updateBanner(bannerData)
+            adminBannerService.upsertBanner(bannerData)
         }
 
         exception.message shouldBe ErrorType.BANNER_NOT_FOUND.message
@@ -122,7 +122,7 @@ class AdminBannerTest : StringSpec({
         every { bannerRepository.existsBannerByDisplaySequenceAndIdNot(bannerData.displaySequence, bannerId) } returns true
 
         val exception = shouldThrow<CoreException> {
-            adminBannerService.updateBanner(bannerData)
+            adminBannerService.upsertBanner(bannerData)
         }
 
         exception.message shouldBe ErrorType.BANNER_DISPLAY_SEQUENCE_ALREADY_EXISTS.message
