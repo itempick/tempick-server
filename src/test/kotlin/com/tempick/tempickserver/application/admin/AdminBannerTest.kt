@@ -11,7 +11,6 @@ import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import java.util.*
 
 class AdminBannerTest : StringSpec({
     val bannerRepository = mockk<BannerRepository>()
@@ -20,12 +19,14 @@ class AdminBannerTest : StringSpec({
     "배너 생성 성공 테스트" {
         val bannerData = AdminCreateBannerData(
             bannerImageUrl = "https://example.com/banner.jpg",
+            clickUrl = "https://example.com/landing",
             displaySequence = 1
         )
 
         val expectedBanner = Banner(
             id = 1L,
             bannerImageUrl = bannerData.bannerImageUrl,
+            clickUrl = bannerData.clickUrl,
             displaySequence = bannerData.displaySequence
         )
 
@@ -57,31 +58,37 @@ class AdminBannerTest : StringSpec({
         val bannerData = AdminCreateBannerData(
             id = bannerId,
             bannerImageUrl = "https://example.com/updated-banner.jpg",
+            clickUrl = "https://example.com/updated-landing",
             displaySequence = 2
         )
 
-        val existingBanner = Optional.of(
-            Banner(
-                id = bannerId,
-                bannerImageUrl = "https://example.com/old-banner.jpg",
-                displaySequence = 2
-            )
+        val existingBanner = Banner(
+            id = bannerId,
+            bannerImageUrl = "https://example.com/old-banner.jpg",
+            clickUrl = "https://example.com/old-landing",
+            displaySequence = 2
         )
 
         val updatedBanner = Banner(
             id = bannerId,
             bannerImageUrl = bannerData.bannerImageUrl,
+            clickUrl = bannerData.clickUrl,
             displaySequence = bannerData.displaySequence
         )
 
-        every { bannerRepository.findById(bannerId) } returns existingBanner
-        every { bannerRepository.existsBannerByDisplaySequenceAndIdNot(bannerData.displaySequence, bannerId) } returns false
+        every { bannerRepository.findActiveBanner(bannerId) } returns existingBanner
+        every {
+            bannerRepository.existsBannerByDisplaySequenceAndIdNot(
+                bannerData.displaySequence,
+                bannerId
+            )
+        } returns false
         every { bannerRepository.save(any()) } returns updatedBanner
 
         val result = adminBannerService.upsertBanner(bannerData)
 
         result shouldBe updatedBanner
-        verify { bannerRepository.findById(bannerId) }
+        verify { bannerRepository.findActiveBanner(bannerId) }
         verify { bannerRepository.save(any()) }
     }
 
@@ -90,10 +97,11 @@ class AdminBannerTest : StringSpec({
         val bannerData = AdminCreateBannerData(
             id = bannerId,
             bannerImageUrl = "https://example.com/banner.jpg",
+            clickUrl = "https://example.com/landing",
             displaySequence = 1
         )
 
-        every { bannerRepository.findById(bannerId) } returns Optional.empty()
+        every { bannerRepository.findActiveBanner(bannerId) } returns null
 
         val exception = shouldThrow<CoreException> {
             adminBannerService.upsertBanner(bannerData)
@@ -107,19 +115,24 @@ class AdminBannerTest : StringSpec({
         val bannerData = AdminCreateBannerData(
             id = bannerId,
             bannerImageUrl = "https://example.com/banner.jpg",
+            clickUrl = "https://example.com/landing",
             displaySequence = 3
         )
 
-        val existingBanner = Optional.of(
-            Banner(
-                id = bannerId,
-                bannerImageUrl = "https://example.com/old-banner.jpg",
-                displaySequence = 2
-            )
+        val existingBanner = Banner(
+            id = bannerId,
+            bannerImageUrl = "https://example.com/old-banner.jpg",
+            clickUrl = "https://example.com/old-landing",
+            displaySequence = 2
         )
 
-        every { bannerRepository.findById(bannerId) } returns existingBanner
-        every { bannerRepository.existsBannerByDisplaySequenceAndIdNot(bannerData.displaySequence, bannerId) } returns true
+        every { bannerRepository.findActiveBanner(bannerId) } returns existingBanner
+        every {
+            bannerRepository.existsBannerByDisplaySequenceAndIdNot(
+                bannerData.displaySequence,
+                bannerId
+            )
+        } returns true
 
         val exception = shouldThrow<CoreException> {
             adminBannerService.upsertBanner(bannerData)

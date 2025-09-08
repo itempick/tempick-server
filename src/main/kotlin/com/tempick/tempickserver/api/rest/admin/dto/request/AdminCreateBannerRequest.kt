@@ -12,6 +12,9 @@ data class AdminCreateBannerRequest(
     @field:NotBlank(message = "배너 이미지 URL은 필수값입니다.")
     val bannerImageUrl: String,
 
+    @field:Schema(description = "배너 클릭 URL", example = "https://example.com/landing", required = false)
+    val clickUrl: String? = null,
+
     @field:Schema(description = "배너 표시 순서", example = "1")
     @field:NotNull(message = "배너 표시 순서는 필수값입니다.")
     val displaySequence: Int

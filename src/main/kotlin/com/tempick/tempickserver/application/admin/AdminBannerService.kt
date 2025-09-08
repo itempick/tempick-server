@@ -13,6 +13,21 @@ class AdminBannerService(
     private val bannerRepository: BannerRepository,
 ) {
 
+    @Transactional(readOnly = true)
+    fun getAllBanners(): List<Banner> {
+        return bannerRepository.findAll()
+            .filter { !it.checkDeleted() }
+            .sortedBy { it.displaySequence }
+            .toList()
+            .ifEmpty { throw CoreException(ErrorType.BANNER_NOT_FOUND) }
+    }
+
+    @Transactional(readOnly = true)
+    fun getBannerById(bannerId: Long): Banner {
+        return bannerRepository.findActiveBanner(bannerId)
+            ?: throw CoreException(ErrorType.BANNER_NOT_FOUND)
+    }
+
     @Transactional
     fun upsertBanner(bannerData: AdminCreateBannerData): Banner {
         return if (bannerData.id != null) {
@@ -27,8 +42,8 @@ class AdminBannerService(
             throw CoreException(ErrorType.BANNER_NOT_FOUND)
         }
 
-        val existingBanner = bannerRepository.findById(bannerData.id)
-            .orElseThrow { throw CoreException(ErrorType.BANNER_NOT_FOUND) }
+        val existingBanner = bannerRepository.findActiveBanner(bannerData.id)
+            ?: throw CoreException(ErrorType.BANNER_NOT_FOUND)
 
         if (bannerData.displaySequence != existingBanner.displaySequence &&
             bannerRepository.existsBannerByDisplaySequenceAndIdNot(bannerData.displaySequence, bannerData.id)
@@ -38,6 +53,7 @@ class AdminBannerService(
 
         existingBanner.displaySequence = bannerData.displaySequence
         existingBanner.bannerImageUrl = bannerData.bannerImageUrl
+        existingBanner.clickUrl = bannerData.clickUrl
         return bannerRepository.save(existingBanner)
     }
 
@@ -47,5 +63,13 @@ class AdminBannerService(
         }
 
         return bannerRepository.save(bannerData.toEntity())
+    }
+
+    @Transactional
+    fun deleteBanner(bannerId: Long) {
+        val banner = bannerRepository.findActiveBanner(bannerId)
+            ?: throw CoreException(ErrorType.BANNER_NOT_FOUND)
+
+        banner.delete()
     }
 }

@@ -14,9 +14,18 @@ class Banner(
     @Column(nullable = false)
     var bannerImageUrl: String,
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
+    var clickUrl: String?,
+
+    @Column(nullable = false)
     var displaySequence: Int,
 
     @Column(nullable = false)
-    val isDeleted: Boolean = false
-): BaseDatetime()
+    var isDeleted: Boolean = false
+) : BaseDatetime() {
+    fun delete() {
+        this.isDeleted = true
+    }
+
+    fun checkDeleted() = this.isDeleted
+}
