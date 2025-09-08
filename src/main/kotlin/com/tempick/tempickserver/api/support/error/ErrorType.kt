@@ -60,4 +60,9 @@ enum class ErrorType(
         "배너를 찾을 수 없습니다.",
         LogLevel.INFO,
     ),
-}
+    CATEGORY_NOT_FOUND(
+        HttpStatus.BAD_REQUEST,
+        ErrorCode.E400,
+        "카테고리를 찾을 수 없습니다.",
+        LogLevel.INFO,
+    ),}

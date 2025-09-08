@@ -2,7 +2,7 @@ package com.tempick.tempickserver.application.admin
 
 import com.tempick.tempickserver.api.support.error.CoreException
 import com.tempick.tempickserver.api.support.error.ErrorType
-import com.tempick.tempickserver.application.admin.dto.AdminCreateBannerData
+import com.tempick.tempickserver.application.admin.dto.AdminBannerData
 import com.tempick.tempickserver.domain.entitiy.Banner
 import com.tempick.tempickserver.domain.repository.BannerRepository
 import org.springframework.stereotype.Service
@@ -16,6 +16,7 @@ class AdminBannerService(
     @Transactional(readOnly = true)
     fun getAllBanners(): List<Banner> {
         return bannerRepository.findAll()
+            .asSequence()
             .filter { !it.checkDeleted() }
             .sortedBy { it.displaySequence }
             .toList()
@@ -29,7 +30,7 @@ class AdminBannerService(
     }
 
     @Transactional
-    fun upsertBanner(bannerData: AdminCreateBannerData): Banner {
+    fun upsertBanner(bannerData: AdminBannerData): Banner {
         return if (bannerData.id != null) {
             updateBanner(bannerData)
         } else {
@@ -37,7 +38,7 @@ class AdminBannerService(
         }
     }
 
-    fun updateBanner(bannerData: AdminCreateBannerData): Banner {
+    fun updateBanner(bannerData: AdminBannerData): Banner {
         if (bannerData.id == null) {
             throw CoreException(ErrorType.BANNER_NOT_FOUND)
         }
@@ -51,13 +52,16 @@ class AdminBannerService(
             throw CoreException(ErrorType.BANNER_DISPLAY_SEQUENCE_ALREADY_EXISTS)
         }
 
-        existingBanner.displaySequence = bannerData.displaySequence
-        existingBanner.bannerImageUrl = bannerData.bannerImageUrl
-        existingBanner.clickUrl = bannerData.clickUrl
+        existingBanner.apply {
+            this.displaySequence = bannerData.displaySequence
+            this.bannerImageUrl = bannerData.bannerImageUrl
+            this.clickUrl = bannerData.clickUrl
+        }
+
         return bannerRepository.save(existingBanner)
     }
 
-    private fun createBanner(bannerData: AdminCreateBannerData): Banner {
+    private fun createBanner(bannerData: AdminBannerData): Banner {
         if (bannerRepository.existsBannerByDisplaySequence(bannerData.displaySequence)) {
             throw CoreException(ErrorType.BANNER_DISPLAY_SEQUENCE_ALREADY_EXISTS)
         }

@@ -16,4 +16,25 @@ class Category(
 
     @Column(nullable = false)
     var sequence: Int,
-) : BaseDatetime()
+
+    @Column(nullable = false)
+    var isDeleted: Boolean = false
+) : BaseDatetime() {
+    fun delete() {
+        isDeleted = true
+    }
+
+    fun checkDeleted() = this.isDeleted
+
+    fun update(name: String, sequence: Int): Category {
+        if (name == this.name) {
+            this.name = name
+        }
+
+        if (sequence == this.sequence) {
+            this.sequence = sequence
+        }
+
+        return this
+    }
+}

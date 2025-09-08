@@ -2,7 +2,7 @@ package com.tempick.tempickserver.application.admin
 
 import com.tempick.tempickserver.api.support.error.CoreException
 import com.tempick.tempickserver.api.support.error.ErrorType
-import com.tempick.tempickserver.application.admin.dto.AdminCreateBannerData
+import com.tempick.tempickserver.application.admin.dto.AdminBannerData
 import com.tempick.tempickserver.domain.entitiy.Banner
 import com.tempick.tempickserver.domain.repository.BannerRepository
 import io.kotest.assertions.throwables.shouldThrow
@@ -17,7 +17,7 @@ class AdminBannerTest : StringSpec({
     val adminBannerService = AdminBannerService(bannerRepository)
 
     "배너 생성 성공 테스트" {
-        val bannerData = AdminCreateBannerData(
+        val bannerData = AdminBannerData(
             bannerImageUrl = "https://example.com/banner.jpg",
             clickUrl = "https://example.com/landing",
             displaySequence = 1
@@ -39,7 +39,7 @@ class AdminBannerTest : StringSpec({
     }
 
     "이미 존재하는 배너 순서로 생성 시 예외 발생 테스트" {
-        val bannerData = AdminCreateBannerData(
+        val bannerData = AdminBannerData(
             bannerImageUrl = "https://example.com/banner.jpg",
             displaySequence = 1
         )
@@ -55,7 +55,7 @@ class AdminBannerTest : StringSpec({
 
     "배너 업데이트 성공 테스트" {
         val bannerId = 1L
-        val bannerData = AdminCreateBannerData(
+        val bannerData = AdminBannerData(
             id = bannerId,
             bannerImageUrl = "https://example.com/updated-banner.jpg",
             clickUrl = "https://example.com/updated-landing",
@@ -94,7 +94,7 @@ class AdminBannerTest : StringSpec({
 
     "존재하지 않는 배너 업데이트 시 예외 발생 테스트" {
         val bannerId = 999L
-        val bannerData = AdminCreateBannerData(
+        val bannerData = AdminBannerData(
             id = bannerId,
             bannerImageUrl = "https://example.com/banner.jpg",
             clickUrl = "https://example.com/landing",
@@ -112,7 +112,7 @@ class AdminBannerTest : StringSpec({
 
     "이미 존재하는 배너 순서로 업데이트 시 예외 발생 테스트" {
         val bannerId = 1L
-        val bannerData = AdminCreateBannerData(
+        val bannerData = AdminBannerData(
             id = bannerId,
             bannerImageUrl = "https://example.com/banner.jpg",
             clickUrl = "https://example.com/landing",

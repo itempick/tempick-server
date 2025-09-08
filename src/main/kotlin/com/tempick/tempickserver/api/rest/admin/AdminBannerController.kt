@@ -4,7 +4,7 @@ import com.tempick.tempickserver.api.rest.admin.dto.request.AdminCreateBannerReq
 import com.tempick.tempickserver.api.rest.admin.dto.respnose.AdminBannerResponse
 import com.tempick.tempickserver.api.support.response.RestResponse
 import com.tempick.tempickserver.application.admin.AdminBannerService
-import com.tempick.tempickserver.application.admin.dto.AdminCreateBannerData
+import com.tempick.tempickserver.application.admin.dto.AdminBannerData
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
@@ -53,7 +53,7 @@ class AdminBannerController(
     fun upsertBanner(
         @RequestBody @Valid request: AdminCreateBannerRequest,
     ): RestResponse<AdminBannerResponse> {
-        val data = AdminCreateBannerData(
+        val data = AdminBannerData(
             id = request.id,
             bannerImageUrl = request.bannerImageUrl,
             clickUrl = request.clickUrl,

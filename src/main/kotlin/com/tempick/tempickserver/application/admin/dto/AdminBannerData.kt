@@ -2,7 +2,7 @@ package com.tempick.tempickserver.application.admin.dto
 
 import com.tempick.tempickserver.domain.entitiy.Banner
 
-data class AdminCreateBannerData (
+data class AdminBannerData (
     val id: Long? = null,
     val bannerImageUrl: String,
     val clickUrl: String? = null,
