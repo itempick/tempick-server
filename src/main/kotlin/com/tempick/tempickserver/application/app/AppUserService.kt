@@ -11,6 +11,6 @@ class AppUserService(
 
     @Transactional(readOnly = true)
     fun checkDuplicateNickname(nickname: String): Boolean {
-        return userRepository.existsByNickname(nickname)
+        return userRepository.existsUserByNickname(nickname)
     }
 }

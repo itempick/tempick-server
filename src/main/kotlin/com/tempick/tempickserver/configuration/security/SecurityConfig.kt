@@ -1,6 +1,5 @@
 package com.tempick.tempickserver.configuration.security
 
-import com.tempick.tempickserver.configuration.properties.SecurityProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
@@ -15,7 +14,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 class SecurityConfig(
-    private val securityProperties: SecurityProperties,
     private val jwtTokenProvider: JwtTokenProvider,
     private val userDetailsService: CustomUserDetailsService,
 ) {
@@ -31,11 +29,13 @@ class SecurityConfig(
         }
 
         http.authorizeHttpRequests { authorize ->
-            securityProperties.publicPaths.forEach { path ->
-                authorize.requestMatchers(path).permitAll()
-            }
+            /**
+             * Admin permission
+             */
+            authorize.requestMatchers("/admin/auth/login").permitAll()
+            authorize.requestMatchers("/admin/**").hasRole("ADMIN")
 
-            authorize.anyRequest().authenticated()
+            authorize.anyRequest().permitAll()
         }
 
         http.addFilterBefore(

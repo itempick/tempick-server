@@ -46,4 +46,18 @@ enum class ErrorType(
         "요청 값이 올바르지 않습니다.",
         LogLevel.INFO,
     ),
+
+    BANNER_DISPLAY_SEQUENCE_ALREADY_EXISTS(
+        HttpStatus.BAD_REQUEST,
+        ErrorCode.E400,
+        "해당 순서로 배너를 등록할 수 없습니다",
+        LogLevel.INFO,
+    ),
+
+    BANNER_NOT_FOUND(
+        HttpStatus.BAD_REQUEST,
+        ErrorCode.E400,
+        "배너를 찾을 수 없습니다.",
+        LogLevel.INFO,
+    ),
 }

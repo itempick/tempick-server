@@ -8,9 +8,6 @@ import org.springframework.web.context.request.ServletRequestAttributes
 
 object AdminUser {
 
-    /**
-     * 현재 사용자의 ID를 반환
-     */
     fun getUserId(): Long? {
         val request = getCurrentRequest() ?: return null
         return request.getAttribute("userId") as? Long
@@ -20,7 +17,7 @@ object AdminUser {
         return try {
             val requestAttributes = RequestContextHolder.getRequestAttributes() as? ServletRequestAttributes
             requestAttributes?.request
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             throw CoreException(ErrorType.DEFAULT_ERROR, "Cannot get current request")
         }
     }
