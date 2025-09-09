@@ -1,16 +1,9 @@
 package com.tempick.tempickserver.domain.entitiy
 
 import com.tempick.tempickserver.domain.enums.Permission
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
+import jakarta.persistence.*
 import jakarta.persistence.FetchType.LAZY
-import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType.IDENTITY
-import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.OneToOne
 
 @Entity
 class Board(
@@ -25,7 +18,7 @@ class Board(
     var category: Category,
 
     @Enumerated(EnumType.STRING)
-    var permissions: Permission,
+    var permission: Permission? = null,
 
     @Column(nullable = false)
     var isMainExposed: Boolean = false,
