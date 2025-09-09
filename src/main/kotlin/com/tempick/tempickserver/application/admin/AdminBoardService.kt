@@ -22,4 +22,18 @@ class AdminBoardService(
 
         return boardRepository.save(Board(name = adminBoardData.name, category = category))
     }
+
+    @Transactional(readOnly = true)
+    fun getBoardById(boardId: Long): Board {
+        return boardRepository.findActiveBoardById(boardId)
+            ?: throw CoreException(ErrorType.BOARD_NOT_FOUND)
+    }
+
+    @Transactional(readOnly = true)
+    fun getAllBoards(): List<Board> {
+        return boardRepository.findAll()
+            .asSequence()
+            .filter { !it.checkDeleted() }
+            .toList()
+    }
 }

@@ -72,4 +72,10 @@ enum class ErrorType(
         "카테고리 표시 순서가 이미 존재합니다.",
         LogLevel.INFO,
     ),
+    BOARD_NOT_FOUND(
+        HttpStatus.BAD_REQUEST,
+        ErrorCode.E400,
+        "게시판을 찾을 수 없습니다.",
+        LogLevel.INFO,
+    ),
 }

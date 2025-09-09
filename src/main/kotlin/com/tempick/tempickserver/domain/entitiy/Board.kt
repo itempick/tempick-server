@@ -25,4 +25,8 @@ class Board(
 
     @Column(nullable = false)
     var isDeleted: Boolean = false
-) : BaseDatetime()
+) : BaseDatetime() {
+    fun checkDeleted(): Boolean {
+        return this.isDeleted
+    }
+}

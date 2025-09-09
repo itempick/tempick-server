@@ -5,9 +5,7 @@ import com.tempick.tempickserver.api.rest.admin.dto.respnose.AdminBoardResponse
 import com.tempick.tempickserver.api.support.response.RestResponse
 import com.tempick.tempickserver.application.admin.AdminBoardService
 import com.tempick.tempickserver.application.admin.dto.AdminBoardData
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 class AdminBoardController(
@@ -24,5 +22,18 @@ class AdminBoardController(
         )
 
         return RestResponse.success(AdminBoardResponse.from(board))
+    }
+
+    @GetMapping("/admin/board/{boardId}")
+    fun getBoardById(@PathVariable boardId: Long): RestResponse<AdminBoardResponse> {
+        val board = adminBoardService.getBoardById(boardId)
+
+        return RestResponse.success(AdminBoardResponse.from(board))
+    }
+
+    @GetMapping("/admin/board")
+    fun getAllBoards(): RestResponse<List<AdminBoardResponse>> {
+        return RestResponse.success(adminBoardService.getAllBoards()
+            .map { AdminBoardResponse.from(it) })
     }
 }
