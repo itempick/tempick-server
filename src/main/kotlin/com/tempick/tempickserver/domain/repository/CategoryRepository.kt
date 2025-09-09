@@ -11,5 +11,11 @@ interface CategoryRepository : JpaRepository<Category, Long> {
     fun findAllActiveCategories(): List<Category>
 
     @Query("select c from Category c where c.id = :id and c.isDeleted = false")
-    fun findActiveCategory(Id: Long): Category?
+    fun findActiveCategory(id: Long): Category?
+
+    @Query("select count(c) > 0 from Category c where c.sequence = :sequence and c.isDeleted = false")
+    fun existsCategoryBySequence(sequence: Int): Boolean
+
+    @Query("select count(c) > 0 from Category c where c.sequence = :sequence and c.id != :id and c.isDeleted = false")
+    fun existsCategoryBySequenceAndIdNot(sequence: Int, id: Long): Boolean
 }

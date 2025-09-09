@@ -23,8 +23,10 @@ class AdminCategoryService(
 
     @Transactional
     fun create(categoryData: AdminCategoryData): Category {
+        validateSequenceForCreate(categoryData.sequence)
         return categoryRepository.save(categoryData.toEntity())
     }
+
 
     @Transactional
     fun delete(categoryId: Long) {
@@ -34,8 +36,25 @@ class AdminCategoryService(
 
     @Transactional
     fun update(categoryData: AdminCategoryData): Category {
-        return categoryRepository.findActiveCategory(categoryData.id)
-            ?.run { update(categoryData.name, categoryData.sequence) }
+        val existingCategory = categoryRepository.findActiveCategory(categoryData.id)
             ?: throw CoreException(ErrorType.CATEGORY_NOT_FOUND)
+
+        validateSequenceForUpdate(categoryData.sequence, categoryData.id)
+
+        return existingCategory.update(categoryData.name, categoryData.sequence)
     }
+
+
+    private fun validateSequenceForCreate(sequence: Int) {
+        if (categoryRepository.existsCategoryBySequence(sequence)) {
+            throw CoreException(ErrorType.CATEGORY_SEQUENCE_ALREADY_EXISTS)
+        }
+    }
+
+    private fun validateSequenceForUpdate(sequence: Int, categoryId: Long) {
+        if (categoryRepository.existsCategoryBySequenceAndIdNot(sequence, categoryId)) {
+            throw CoreException(ErrorType.CATEGORY_SEQUENCE_ALREADY_EXISTS)
+        }
+    }
+
 }

@@ -27,11 +27,11 @@ class Category(
     fun checkDeleted() = this.isDeleted
 
     fun update(name: String, sequence: Int): Category {
-        if (name == this.name) {
+        if (name != this.name) {
             this.name = name
         }
 
-        if (sequence == this.sequence) {
+        if (sequence != this.sequence) {
             this.sequence = sequence
         }
 
