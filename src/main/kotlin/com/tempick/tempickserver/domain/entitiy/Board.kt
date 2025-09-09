@@ -2,7 +2,6 @@ package com.tempick.tempickserver.domain.entitiy
 
 import com.tempick.tempickserver.domain.enums.Permission
 import jakarta.persistence.Column
-import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
@@ -30,9 +29,6 @@ class Board(
 
     @Column(nullable = false)
     var isMainExposed: Boolean = false,
-
-    @Embedded
-    var tag: Tag? = null,
 
     @Column(nullable = false)
     var isDeleted: Boolean = false

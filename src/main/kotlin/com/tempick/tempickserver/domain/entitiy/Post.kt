@@ -1,7 +1,12 @@
 package com.tempick.tempickserver.domain.entitiy
 
-import jakarta.persistence.*
+import jakarta.persistence.Column
+import jakarta.persistence.Embedded
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType.IDENTITY
+import jakarta.persistence.Id
+import jakarta.persistence.OneToMany
 
 @Entity
 class Post (
@@ -13,6 +18,9 @@ class Post (
 
     @Column(nullable = false)
     var content: String,
+
+    @Embedded
+    var tag: Tag? = null,
 
     @OneToMany(mappedBy = "post")
     var comments: MutableSet<Comment> = mutableSetOf(),
