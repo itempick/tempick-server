@@ -1,22 +1,16 @@
 package com.tempick.tempickserver.domain.entitiy
 
 import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType.IDENTITY
-import jakarta.persistence.Id
+import jakarta.persistence.Embeddable
 
-@Entity
+@Embeddable
 class Tag (
-    @Id @GeneratedValue(strategy = IDENTITY)
-    var id: Long = 0L,
-
     @Column(unique = true)
-    var name: String,
+    var tagName: String,
 
     @Column(nullable = false)
-    var color: String,
+    var tagColor: String,
 
     @Column(nullable = false)
-    var isDeleted: Boolean = false
-): BaseDatetime()
+    var isTopAllocated: Boolean = false
+)
