@@ -78,4 +78,16 @@ enum class ErrorType(
         "게시판을 찾을 수 없습니다.",
         LogLevel.INFO,
     ),
+    BOARD_CATEGORY_CANNOT_BE_CHANGED(
+        HttpStatus.BAD_REQUEST,
+        ErrorCode.E400,
+        "게시판의 카테고리는 변경할 수 없습니다.",
+        LogLevel.INFO,
+    ),
+    DUPLICATE_BOARD_NAME(
+        HttpStatus.BAD_REQUEST,
+        ErrorCode.E400,
+        "게시판 이름은 중복될 수 없습니다.",
+        LogLevel.INFO,
+    ),
 }

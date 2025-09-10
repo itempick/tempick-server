@@ -5,6 +5,7 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType.IDENTITY
 import jakarta.persistence.Id
+import jakarta.persistence.OneToMany
 
 @Entity
 class Category(
@@ -16,6 +17,9 @@ class Category(
 
     @Column(nullable = false)
     var sequence: Int,
+
+    @OneToMany(mappedBy = "category")
+    var boards: MutableList<Board> = mutableListOf(),
 
     @Column(nullable = false)
     var isDeleted: Boolean = false

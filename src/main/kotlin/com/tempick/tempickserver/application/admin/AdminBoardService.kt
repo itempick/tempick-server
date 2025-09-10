@@ -17,6 +17,10 @@ class AdminBoardService(
 
     @Transactional
     fun create(adminBoardData: AdminBoardData): Board {
+        if (boardRepository.existsBoardByName(adminBoardData.name)) {
+            throw CoreException(ErrorType.DUPLICATE_BOARD_NAME)
+        }
+
         val category = categoryRepository.findActiveCategory(adminBoardData.categoryId)
             ?: throw CoreException(ErrorType.CATEGORY_NOT_FOUND)
 
@@ -42,6 +46,26 @@ class AdminBoardService(
         val board = boardRepository.findActiveBoardById(boardId)
             ?: throw CoreException(ErrorType.BOARD_NOT_FOUND)
 
+        boardRepository.deleteAllBoardsByCategoryId(board.category.id)
+
         board.delete()
+    }
+
+    @Transactional
+    fun update(adminBoardData: AdminBoardData): Board {
+        val board = boardRepository.findActiveBoardById(adminBoardData.id)
+            ?: throw CoreException(ErrorType.BOARD_NOT_FOUND)
+
+        if (!board.validateCategoryChange(adminBoardData.categoryId)) {
+            throw CoreException(ErrorType.BOARD_CATEGORY_CANNOT_BE_CHANGED)
+        }
+
+        board.update(
+            name = adminBoardData.name,
+            permission = adminBoardData.permission,
+            isMainExposed = adminBoardData.isMainExposed
+        )
+
+        return board
     }
 }

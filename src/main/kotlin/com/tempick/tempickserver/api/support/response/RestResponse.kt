@@ -1,6 +1,5 @@
 package com.tempick.tempickserver.api.support.response
 
-import com.tempick.tempickserver.api.rest.admin.dto.respnose.AdminBannerResponse
 import com.tempick.tempickserver.api.support.error.ErrorMessage
 import com.tempick.tempickserver.api.support.error.ErrorType
 
@@ -10,7 +9,7 @@ data class RestResponse<T> private constructor(
     val error: ErrorMessage? = null,
 ) {
     companion object {
-        fun success(): RestResponse<AdminBannerResponse> {
+        fun success(): RestResponse<Any> {
             return RestResponse(ResultType.SUCCESS, null, null)
         }
 

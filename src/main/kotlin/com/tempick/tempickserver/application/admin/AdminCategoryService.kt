@@ -2,6 +2,7 @@ package com.tempick.tempickserver.application.admin
 
 import com.tempick.tempickserver.api.support.error.CoreException
 import com.tempick.tempickserver.api.support.error.ErrorType
+import com.tempick.tempickserver.application.admin.dto.AdminCategoryBoardResult
 import com.tempick.tempickserver.application.admin.dto.AdminCategoryData
 import com.tempick.tempickserver.domain.entitiy.Category
 import com.tempick.tempickserver.domain.repository.CategoryRepository
@@ -18,6 +19,15 @@ class AdminCategoryService(
         return categoryRepository.findAllActiveCategories()
             .asSequence()
             .filter { !it.checkDeleted() }
+            .toList()
+    }
+
+    @Transactional(readOnly = true)
+    fun getAllCategoriesWithBoards(): List<AdminCategoryBoardResult> {
+        return categoryRepository.findAllActiveCategories()
+            .asSequence()
+            .filter { !it.checkDeleted() }
+            .map { category -> AdminCategoryBoardResult.from(category) }
             .toList()
     }
 

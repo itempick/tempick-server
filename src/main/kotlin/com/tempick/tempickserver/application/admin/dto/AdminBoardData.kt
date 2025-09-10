@@ -6,6 +6,6 @@ data class AdminBoardData (
     val id: Long = 0L,
     val name: String,
     val categoryId: Long = 0L,
-    val permission: Permission? = null,
-    val isMainExposed: Boolean? = null,
+    val permission: Permission = Permission.ALL,
+    val isMainExposed: Boolean = false,
 )

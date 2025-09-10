@@ -2,6 +2,7 @@ package com.tempick.tempickserver.api.rest.admin
 
 import com.tempick.tempickserver.api.rest.admin.dto.request.AdminCreateCategoryRequest
 import com.tempick.tempickserver.api.rest.admin.dto.request.AdminUpdateCategoryRequest
+import com.tempick.tempickserver.api.rest.admin.dto.respnose.AdminCategoryBoardResponse
 import com.tempick.tempickserver.api.rest.admin.dto.respnose.AdminCategoryResponse
 import com.tempick.tempickserver.api.support.response.RestResponse
 import com.tempick.tempickserver.application.admin.AdminCategoryService
@@ -52,15 +53,13 @@ class AdminCategoryController(
     )
     fun createCategory(
         @RequestBody @Valid request: AdminCreateCategoryRequest,
-    ): RestResponse<List<AdminCategoryResponse>> {
+    ): RestResponse<AdminCategoryResponse> {
         val data = AdminCategoryData(
             id = 0L,
             name = request.name,
             sequence = request.sequence
         )
-        adminCategoryService.create(data)
-        val categories = adminCategoryService.getAllCategories()
-        return RestResponse.success(categories.map { AdminCategoryResponse.from(it) })
+        return RestResponse.success(AdminCategoryResponse.from(adminCategoryService.create(data)))
     }
 
     @PutMapping(
@@ -86,15 +85,13 @@ class AdminCategoryController(
     )
     fun updateCategory(
         @RequestBody @Valid request: AdminUpdateCategoryRequest,
-    ): RestResponse<List<AdminCategoryResponse>> {
+    ): RestResponse<AdminCategoryResponse> {
         val data = AdminCategoryData(
             id = request.id,
             name = request.name,
             sequence = request.sequence
         )
-        adminCategoryService.update(data)
-        val categories = adminCategoryService.getAllCategories()
-        return RestResponse.success(categories.map { AdminCategoryResponse.from(it) })
+        return RestResponse.success(AdminCategoryResponse.from(adminCategoryService.update(data)))
     }
 
     @GetMapping(
@@ -102,22 +99,22 @@ class AdminCategoryController(
         produces = [MediaType.APPLICATION_JSON_VALUE],
     )
     @Operation(
-        summary = "모든 카테고리 조회",
-        description = "모든 카테고리 정보를 조회합니다.",
+        summary = "모든 카테고리, 게시판 조회",
+        description = "모든 카테고리, 게시판 정보를 조회합니다.",
     )
     @ApiResponses(
         value = [
             ApiResponse(
                 responseCode = "200",
-                description = "카테고리 목록 조회 성공",
-                content = [Content(array = ArraySchema(schema = Schema(implementation = AdminCategoryResponse::class)))],
+                description = "카테고리, 게시판 목록 조회 성공",
+                content = [Content(array = ArraySchema(schema = Schema(implementation = AdminCategoryBoardResponse::class)))],
             ),
             ApiResponse(responseCode = "401", description = "인증되지 않은 사용자입니다."),
         ],
     )
-    fun getAllCategories(): RestResponse<List<AdminCategoryResponse>> {
-        val categories = adminCategoryService.getAllCategories()
-        return RestResponse.success(categories.map { AdminCategoryResponse.from(it) })
+    fun getAllCategories(): RestResponse<List<AdminCategoryBoardResponse>> {
+        val categoriesWithBoards = adminCategoryService.getAllCategoriesWithBoards()
+        return RestResponse.success(categoriesWithBoards.map { AdminCategoryBoardResponse.from(it) })
     }
 
     @DeleteMapping(
@@ -142,9 +139,8 @@ class AdminCategoryController(
     )
     fun deleteCategory(
         @PathVariable categoryId: Long,
-    ): RestResponse<List<AdminCategoryResponse>> {
+    ): RestResponse<Any> {
         adminCategoryService.delete(categoryId)
-        val categories = adminCategoryService.getAllCategories()
-        return RestResponse.success(categories.map { AdminCategoryResponse.from(it) })
+        return RestResponse.success()
     }
 }

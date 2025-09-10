@@ -32,7 +32,7 @@ class AdminAuthServiceTest : StringSpec({
         adminAuthProperties = adminAuthProperties
     )
 
-    "로그인 성공 테스트" {
+    "관리자 계정으로 성공적으로 로그인할 수 있다" {
         val email = "admin@example.com"
         val password = "password"
         val loginData = AdminLoginData(email = email, password = password)
@@ -57,7 +57,7 @@ class AdminAuthServiceTest : StringSpec({
         result shouldBe expectedToken
     }
 
-    "존재하지 않는 사용자로 로그인 시 예외 발생 테스트" {
+    "존재하지 않는 사용자로 로그인하면 예외가 발생한다" {
         // given
         val email = "nonexistent@example.com"
         val password = "password"
@@ -72,7 +72,7 @@ class AdminAuthServiceTest : StringSpec({
         exception.errorType shouldBe ErrorType.USER_NOT_FOUND
     }
 
-    "잘못된 비밀번호로 로그인 시 예외 발생 테스트" {
+    "잘못된 비밀번호로 로그인하면 예외가 발생한다" {
         val email = "admin@example.com"
         val password = "wrongPassword"
         val loginData = AdminLoginData(email = email, password = password)

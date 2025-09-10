@@ -10,7 +10,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType.IDENTITY
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
-import jakarta.persistence.OneToOne
+import jakarta.persistence.ManyToOne
 
 @Entity
 class Board(
@@ -20,12 +20,12 @@ class Board(
     @Column(nullable = false)
     var name: String,
 
-    @OneToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "category_id")
     var category: Category,
 
     @Enumerated(EnumType.STRING)
-    var permission: Permission? = null,
+    var permission: Permission = Permission.ALL,
 
     @Column(nullable = false)
     var isMainExposed: Boolean = false,
@@ -39,5 +39,25 @@ class Board(
 
     fun delete() {
         this.isDeleted = true
+    }
+
+    fun update(name: String, permission: Permission, isMainExposed: Boolean): Board {
+        if (name != this.name) {
+            this.name = name
+        }
+
+        if (permission != this.permission) {
+            this.permission = permission
+        }
+
+        if (isMainExposed != this.isMainExposed) {
+            this.isMainExposed = isMainExposed
+        }
+        return this
+    }
+
+    fun validateCategoryChange(categoryId: Long): Boolean {
+        // 카테고리는 변경 될 수 없음
+        return categoryId == 0L || categoryId == this.category.id
     }
 }

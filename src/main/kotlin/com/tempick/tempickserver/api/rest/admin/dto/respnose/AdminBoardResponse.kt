@@ -3,16 +3,20 @@ package com.tempick.tempickserver.api.rest.admin.dto.respnose
 import com.tempick.tempickserver.domain.entitiy.Board
 
 data class AdminBoardResponse(
-    val boardId: Long,
+    val id: Long,
     val categoryName: String,
     val boardName: String,
+    val permission: String?,
+    val isMainExposed: Boolean?
 ) {
     companion object {
         fun from(board: Board): AdminBoardResponse {
             return AdminBoardResponse(
-                boardId = board.id,
+                id = board.id,
                 categoryName = board.category.name,
-                boardName = board.name
+                boardName = board.name,
+                permission = board.permission.ko,
+                isMainExposed = board.isMainExposed
             )
         }
     }

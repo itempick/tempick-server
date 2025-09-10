@@ -134,7 +134,7 @@ class AdminBannerController(
     )
     fun deleteBanner(
         @PathVariable bannerId: Long,
-    ): RestResponse<AdminBannerResponse> {
+    ): RestResponse<Any> {
         adminBannerService.deleteBanner(bannerId)
         return RestResponse.success()
     }

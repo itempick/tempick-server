@@ -7,7 +7,12 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface CategoryRepository : JpaRepository<Category, Long> {
-    @Query("select c from Category c where c.isDeleted = false")
+    @Query("" +
+            "select distinct c from Category c " +
+            "left join fetch c.boards b " +
+            "where c.isDeleted = false " +
+            "order by c.sequence" +
+            "")
     fun findAllActiveCategories(): List<Category>
 
     @Query("select c from Category c where c.id = :id and c.isDeleted = false")

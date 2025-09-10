@@ -6,6 +6,7 @@ import com.tempick.tempickserver.api.support.error.ErrorType
 import com.tempick.tempickserver.application.admin.dto.AdminCategoryData
 import com.tempick.tempickserver.domain.entitiy.Category
 import com.tempick.tempickserver.domain.repository.CategoryRepository
+import com.tempick.tempickserver.util.TestMockData
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
@@ -24,7 +25,7 @@ class AdminCategoryTest : StringSpec({
             sequence = 1
         )
 
-        val expectedCategory = Category(
+        val expectedCategory = TestMockData.createCategory(
             id = 1L,
             name = categoryData.name,
             sequence = categoryData.sequence
@@ -65,7 +66,7 @@ class AdminCategoryTest : StringSpec({
             sequence = 2
         )
 
-        val existingCategory = Category(
+        val existingCategory = TestMockData.createCategory(
             id = categoryId,
             name = "공지",
             sequence = 1
@@ -89,7 +90,7 @@ class AdminCategoryTest : StringSpec({
             sequence = 2
         )
 
-        val existingCategory = Category(
+        val existingCategory = TestMockData.createCategory(
             id = categoryId,
             name = "공지",
             sequence = 1
@@ -126,7 +127,7 @@ class AdminCategoryTest : StringSpec({
 
     "카테고리 삭제 성공 테스트" {
         val categoryId = 1L
-        val existingCategory = Category(
+        val existingCategory = TestMockData.createCategory(
             id = categoryId,
             name = "공지",
             sequence = 1
@@ -153,8 +154,8 @@ class AdminCategoryTest : StringSpec({
 
     "모든 카테고리 조회 성공 테스트" {
         val categories = listOf(
-            Category(id = 1L, name = "공지", sequence = 1),
-            Category(id = 2L, name = "거래", sequence = 2)
+            TestMockData.createCategory(id = 1L, name = "공지", sequence = 1),
+            TestMockData.createCategory(id = 2L, name = "거래", sequence = 2)
         )
 
         every { categoryRepository.findAllActiveCategories() } returns categories
