@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface BoardRepository: JpaRepository<Board, Long> {
-    @Query("SELECT FROM Board b WHERE b.id = :id AND b.isDeleted = false")
+    @Query("SELECT b FROM Board b WHERE b.id = :boardId AND b.isDeleted = true")
     fun findActiveBoardById(boardId: Long): Board?
 }

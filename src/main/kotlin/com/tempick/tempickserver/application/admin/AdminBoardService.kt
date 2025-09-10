@@ -36,4 +36,12 @@ class AdminBoardService(
             .filter { !it.checkDeleted() }
             .toList()
     }
+
+    @Transactional
+    fun delete(boardId: Long) {
+        val board = boardRepository.findActiveBoardById(boardId)
+            ?: throw CoreException(ErrorType.BOARD_NOT_FOUND)
+
+        board.delete()
+    }
 }
