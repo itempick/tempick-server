@@ -11,10 +11,10 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
 import io.mockk.just
+import io.mockk.mockk
 import io.mockk.runs
+import io.mockk.verify
 
 class AdminBoardServiceTest : StringSpec({
     val boardRepository = mockk<BoardRepository>()
@@ -138,8 +138,7 @@ class AdminBoardServiceTest : StringSpec({
     "보드 삭제 성공 테스트" {
         // Given
         val boardId = 1L
-        val category = Category(id = 1L, name = "Test Category", sequence = 1)
-        val board = Board(id = boardId, name = "Test Board", category = category)
+        val board = mockk<Board>()
 
         every { boardRepository.findActiveBoardById(boardId) } returns board
         every { board.delete() } just runs

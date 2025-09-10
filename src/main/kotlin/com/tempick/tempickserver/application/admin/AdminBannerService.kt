@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class AdminBannerService(
     private val bannerRepository: BannerRepository,
+    private val adminBannerUpsertHandler: AdminBannerUpsertHandler
 ) {
 
     @Transactional(readOnly = true)
@@ -32,41 +33,10 @@ class AdminBannerService(
     @Transactional
     fun upsertBanner(bannerData: AdminBannerData): Banner {
         return if (bannerData.id != null) {
-            updateBanner(bannerData)
+            adminBannerUpsertHandler.updateBanner(bannerData)
         } else {
-            createBanner(bannerData)
+            adminBannerUpsertHandler.createBanner(bannerData)
         }
-    }
-
-    fun updateBanner(bannerData: AdminBannerData): Banner {
-        if (bannerData.id == null) {
-            throw CoreException(ErrorType.BANNER_NOT_FOUND)
-        }
-
-        val existingBanner = bannerRepository.findActiveBanner(bannerData.id)
-            ?: throw CoreException(ErrorType.BANNER_NOT_FOUND)
-
-        if (bannerData.displaySequence != existingBanner.displaySequence &&
-            bannerRepository.existsBannerByDisplaySequenceAndIdNot(bannerData.displaySequence, bannerData.id)
-        ) {
-            throw CoreException(ErrorType.BANNER_DISPLAY_SEQUENCE_ALREADY_EXISTS)
-        }
-
-        existingBanner.apply {
-            this.displaySequence = bannerData.displaySequence
-            this.bannerImageUrl = bannerData.bannerImageUrl
-            this.clickUrl = bannerData.clickUrl
-        }
-
-        return bannerRepository.save(existingBanner)
-    }
-
-    private fun createBanner(bannerData: AdminBannerData): Banner {
-        if (bannerRepository.existsBannerByDisplaySequence(bannerData.displaySequence)) {
-            throw CoreException(ErrorType.BANNER_DISPLAY_SEQUENCE_ALREADY_EXISTS)
-        }
-
-        return bannerRepository.save(bannerData.toEntity())
     }
 
     @Transactional
