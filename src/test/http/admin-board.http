@@ -1,0 +1,35 @@
+### 관리자 게시판 API 테스트
+
+@baseUrl = http://localhost:8080
+
+POST {{baseUrl}}/admin/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@admin.com",
+  "password": "admin12!!@"
+}
+
+> {% client.global.set("adminToken", response.body.data.token) %}
+
+### 새 게시판 생성
+POST {{baseUrl}}/admin/board
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "테스트 게시판",
+  "categoryId": 1
+}
+
+### ID로 게시판 조회
+GET {{baseUrl}}/admin/board/1
+Authorization: Bearer {{adminToken}}
+
+### 모든 게시판 조회
+GET {{baseUrl}}/admin/board
+Authorization: Bearer {{adminToken}}
+
+### 게시판 삭제
+DELETE {{baseUrl}}/admin/board/1
+Authorization: Bearer {{adminToken}}

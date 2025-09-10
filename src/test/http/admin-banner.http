@@ -1,0 +1,50 @@
+### 관리자 배너 API 테스트
+
+### 변수
+@baseUrl = http://localhost:8080
+
+### 관리자 로그인 (토큰 획득)
+POST {{baseUrl}}/admin/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@admin.com",
+  "password": "admin12!!@"
+}
+
+> {% client.global.set("adminToken", response.body.data.token) %}
+
+### 배너 생성 또는 업데이트
+POST {{baseUrl}}/admin/banners
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "bannerImageUrl": "https://example.com/banner.jpg",
+  "clickUrl": "https://example.com/landing",
+  "displaySequence": 1
+}
+
+### 기존 배너 업데이트
+POST {{baseUrl}}/admin/banners
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "id": 1,
+  "bannerImageUrl": "https://example.com/updated-banner.jpg",
+  "clickUrl": "https://example.com/updated-landing",
+  "displaySequence": 2
+}
+
+### ID로 배너 조회
+GET {{baseUrl}}/admin/banners/1
+Authorization: Bearer {{adminToken}}
+
+### 모든 배너 조회
+GET {{baseUrl}}/admin/banners
+Authorization: Bearer {{adminToken}}
+
+### 배너 삭제
+DELETE {{baseUrl}}/admin/banners/1
+Authorization: Bearer {{adminToken}}

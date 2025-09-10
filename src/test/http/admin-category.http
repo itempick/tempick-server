@@ -1,0 +1,42 @@
+### 관리자 카테고리 API 테스트
+
+@baseUrl = http://localhost:8080
+
+POST {{baseUrl}}/admin/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@admin.com",
+  "password": "admin12!!@"
+}
+
+> {% client.global.set("adminToken", response.body.data.token) %}
+
+### 카테고리 생성
+POST {{baseUrl}}/admin/categories
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "거래 게시판",
+  "sequence": 1
+}
+
+### 카테고리 수정
+PUT {{baseUrl}}/admin/categories
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "id": 1,
+  "name": "수정된 거래 게시판",
+  "sequence": 2
+}
+
+### 모든 카테고리 조회
+GET {{baseUrl}}/admin/categories
+Authorization: Bearer {{adminToken}}
+
+### 카테고리 삭제
+DELETE {{baseUrl}}/admin/categories/1
+Authorization: Bearer {{adminToken}}
