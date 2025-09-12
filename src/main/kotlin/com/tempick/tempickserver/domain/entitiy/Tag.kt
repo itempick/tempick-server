@@ -10,7 +10,4 @@ class Tag (
 
     @Column(nullable = false)
     var tagColor: String,
-
-    @Column(nullable = false)
-    var isTopAllocated: Boolean = false
 )

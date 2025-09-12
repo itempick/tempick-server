@@ -8,10 +8,10 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface BoardRepository: JpaRepository<Board, Long> {
-    @Query("SELECT b FROM Board b WHERE b.id = :boardId AND b.isDeleted = true")
+    @Query("SELECT b FROM Board b WHERE b.id = :boardId AND b.isDeleted = false")
     fun findActiveBoardById(boardId: Long): Board?
 
-    @Query("SELECT count(b) > 0 FROM Board b WHERE b.name = :boardName AND b.isDeleted = true")
+    @Query("SELECT count(b) > 0 FROM Board b WHERE b.name = :boardName AND b.isDeleted = false")
     fun existsBoardByName(boardName: String): Boolean
 
     @Modifying

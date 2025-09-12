@@ -21,4 +21,8 @@ class Comment(
 
     @Column(nullable = false)
     var isDeleted: Boolean = false
-): BaseDatetime()
+): BaseDatetime() {
+    fun delete() {
+        this.isDeleted = true
+    }
+}

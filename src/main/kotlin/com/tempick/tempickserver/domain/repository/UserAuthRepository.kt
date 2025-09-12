@@ -12,4 +12,8 @@ interface UserAuthRepository : JpaRepository<UserAuth, Long> {
 
     @Query("SELECT CASE WHEN COUNT(ua) > 0 THEN true ELSE false END FROM UserAuth ua WHERE ua.email = :email")
     fun existsByEmail(email: String): Boolean
+
+    @Query("SELECT ua FROM UserAuth ua WHERE ua.user.id = :userId")
+    fun findByUserId(userId: Long): UserAuth?
+
 }

@@ -46,6 +46,12 @@ enum class ErrorType(
         "요청 값이 올바르지 않습니다.",
         LogLevel.INFO,
     ),
+    DUPLICATE_EMAIL(
+        HttpStatus.BAD_REQUEST,
+        ErrorCode.E400,
+        "이미 사용 중인 이메일입니다.",
+        LogLevel.INFO,
+    ),
 
     BANNER_DISPLAY_SEQUENCE_ALREADY_EXISTS(
         HttpStatus.BAD_REQUEST,
@@ -88,6 +94,18 @@ enum class ErrorType(
         HttpStatus.BAD_REQUEST,
         ErrorCode.E400,
         "게시판 이름은 중복될 수 없습니다.",
+        LogLevel.INFO,
+    ),
+    POST_NOT_FOUND(
+        HttpStatus.BAD_REQUEST,
+        ErrorCode.E400,
+        "게시물을 찾을 수 없습니다.",
+        LogLevel.INFO,
+    ),
+    COMMENT_NOT_FOUND(
+        HttpStatus.BAD_REQUEST,
+        ErrorCode.E400,
+        "댓글을 찾을 수 없습니다.",
         LogLevel.INFO,
     ),
 }
