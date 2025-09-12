@@ -29,6 +29,12 @@ class SecurityConfig(
         }
 
         http.authorizeHttpRequests { authorize ->
+
+            /**
+             * ping
+             */
+            authorize.requestMatchers("/").permitAll()
+
             /**
              * Admin permission
              */
