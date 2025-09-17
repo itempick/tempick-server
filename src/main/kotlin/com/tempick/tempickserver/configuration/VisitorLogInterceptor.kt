@@ -1,6 +1,5 @@
 package com.tempick.tempickserver.configuration
 
-import com.tempick.tempickserver.domain.entitiy.VisitorLog
 import com.tempick.tempickserver.domain.repository.VisitorLogRepository
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -13,7 +12,7 @@ class VisitorLogInterceptor(
 ) : HandlerInterceptor {
 
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
-        visitorLogRepository.save(VisitorLog())
+//        visitorLogRepository.save(VisitorLog())
         return true
     }
 }
