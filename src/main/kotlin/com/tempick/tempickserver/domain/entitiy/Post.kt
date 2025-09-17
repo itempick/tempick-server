@@ -28,6 +28,9 @@ class Post (
     @Column(nullable = false)
     var exposePriority: Int = 0,
 
+    @Column(nullable = false)
+    var viewCount: Int = 0,
+
     @OneToMany(mappedBy = "post")
     var comments: MutableList<Comment> = mutableListOf(),
 
