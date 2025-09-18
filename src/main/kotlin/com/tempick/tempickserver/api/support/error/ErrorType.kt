@@ -36,7 +36,7 @@ enum class ErrorType(
     ),
     FILE_SIZE_EXCEEDED(
         HttpStatus.PAYLOAD_TOO_LARGE,
-        ErrorCode.E400,
+        ErrorCode.E413,
         "파일 크기가 제한을 초과했습니다.",
         LogLevel.INFO,
     ),

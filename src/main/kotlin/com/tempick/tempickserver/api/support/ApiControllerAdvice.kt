@@ -11,6 +11,7 @@ import org.springframework.security.authorization.AuthorizationDeniedException
 import org.springframework.validation.BindException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import org.springframework.web.multipart.MaxUploadSizeExceededException
 
 @RestControllerAdvice
 class ApiControllerAdvice {
@@ -55,5 +56,14 @@ class ApiControllerAdvice {
     fun handleException(e: Exception): ResponseEntity<RestResponse<Any>> {
         log.error("Exception : {}", e.message, e)
         return ResponseEntity(RestResponse.error(ErrorType.DEFAULT_ERROR), ErrorType.DEFAULT_ERROR.status)
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException::class)
+    fun handleMaxUploadSizeExceededException(e: MaxUploadSizeExceededException): ResponseEntity<RestResponse<Any>> {
+        log.warn("MaxUploadSizeExceededException: {}", e.message)
+        return ResponseEntity(
+            RestResponse.error(ErrorType.FILE_SIZE_EXCEEDED),
+            ErrorType.FILE_SIZE_EXCEEDED.status
+        )
     }
 }
