@@ -15,7 +15,7 @@ data class AdminBoardResponse(
                 id = board.id,
                 categoryName = board.category.name,
                 boardName = board.name,
-                permission = board.permission.ko,
+                permission = board.permission.name,
                 isMainExposed = board.isMainExposed
             )
         }

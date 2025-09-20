@@ -83,6 +83,7 @@ class AdminDashboardService(
     private fun getTopPosts(startDate: LocalDateTime, endDate: LocalDateTime): List<TopPostResponse> {
         return postRepository.findTop5ByViewCount(PageRequest.of(0, 5), startDate, endDate).map {
             TopPostResponse(
+                it.id,
                 it.title,
                 it.viewCount,
                 it.createdAt.toLocalDate()

@@ -7,6 +7,7 @@ data class AdminUserDetailResponse(
     val email: String,
     val nickname: String,
     val isBlacklisted: Boolean,
+    val blacklistReason: String?,
 ) {
     companion object {
         fun from(adminUserResult: AdminUserResult): AdminUserDetailResponse {
@@ -15,6 +16,7 @@ data class AdminUserDetailResponse(
                 email = adminUserResult.email,
                 nickname = adminUserResult.nickname,
                 isBlacklisted = adminUserResult.isBlacklisted,
+                blacklistReason = adminUserResult.blacklistReason,
             )
         }
     }

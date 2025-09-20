@@ -4,6 +4,7 @@ import com.tempick.tempickserver.api.support.error.CoreException
 import com.tempick.tempickserver.api.support.error.ErrorType
 import com.tempick.tempickserver.application.admin.dto.AdminBoardData
 import com.tempick.tempickserver.domain.entitiy.Board
+import com.tempick.tempickserver.domain.enums.Permission
 import com.tempick.tempickserver.domain.repository.BoardRepository
 import com.tempick.tempickserver.domain.repository.CategoryRepository
 import org.springframework.stereotype.Service
@@ -46,8 +47,6 @@ class AdminBoardService(
         val board = boardRepository.findActiveBoardById(boardId)
             ?: throw CoreException(ErrorType.BOARD_NOT_FOUND)
 
-        boardRepository.deleteAllBoardsByCategoryId(board.category.id)
-
         board.delete()
     }
 
@@ -62,7 +61,7 @@ class AdminBoardService(
 
         board.update(
             name = adminBoardData.name,
-            permission = adminBoardData.permission,
+            permission = Permission.valueOf(adminBoardData.permission.name.uppercase()),
             isMainExposed = adminBoardData.isMainExposed
         )
 

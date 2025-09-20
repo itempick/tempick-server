@@ -25,7 +25,7 @@ class Board(
     var category: Category,
 
     @Enumerated(EnumType.STRING)
-    var permission: Permission = Permission.ALL,
+    var permission: Permission = Permission.PUBLIC,
 
     @Column(nullable = false)
     var isMainExposed: Boolean = false,
