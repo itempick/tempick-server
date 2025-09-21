@@ -23,7 +23,7 @@ class Post (
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    var author: User,
+    var user: User,
 
     @Column(nullable = false)
     var exposePriority: Int = 0,
@@ -41,8 +41,8 @@ class Post (
         exposePriority: Int? = null,
         title: String,
         content: String,
-        tagName: String,
-        tagColor: String,
+        tagName: String?,
+        tagColor: String?,
     ) {
         if (exposePriority != this.exposePriority && exposePriority != null) {
             this.exposePriority = exposePriority
@@ -56,6 +56,14 @@ class Post (
             this.content = content
         }
 
-        this.tag = Tag(tagName, tagColor)
+        if (tagName != null && tagColor != null) {
+            this.tag = Tag(tagName, tagColor)
+        } else {
+            this.tag = null
+        }
+    }
+
+    fun delete() {
+        this.isDeleted = true
     }
 }

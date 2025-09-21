@@ -19,7 +19,7 @@ data class AdminPostListItemResponse(
                 boardName = post.board.name,
                 title = post.title,
                 commentCount = activeComments,
-                authorNickname = post.author.nickname,
+                authorNickname = post.user.nickname,
                 createdAt = DateTimeUtils.toDisplayDatetime(post.createdAt),
             )
         }

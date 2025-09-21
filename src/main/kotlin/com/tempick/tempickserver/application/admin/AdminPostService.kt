@@ -1,5 +1,6 @@
 package com.tempick.tempickserver.application.admin
 
+import com.tempick.tempickserver.api.rest.admin.dto.request.AdminCreatePostRequest
 import com.tempick.tempickserver.api.rest.admin.dto.request.AdminUpdatePostRequest
 import com.tempick.tempickserver.api.rest.admin.dto.respnose.AdminPostCommentResponse
 import com.tempick.tempickserver.api.rest.admin.dto.respnose.AdminPostDetailResponse
@@ -7,8 +8,12 @@ import com.tempick.tempickserver.api.rest.admin.dto.respnose.AdminPostListItemRe
 import com.tempick.tempickserver.api.rest.common.dto.response.CustomPage
 import com.tempick.tempickserver.api.support.error.CoreException
 import com.tempick.tempickserver.api.support.error.ErrorType
+import com.tempick.tempickserver.domain.entitiy.Post
+import com.tempick.tempickserver.domain.entitiy.Tag
+import com.tempick.tempickserver.domain.repository.BoardRepository
 import com.tempick.tempickserver.domain.repository.CommentRepository
 import com.tempick.tempickserver.domain.repository.PostRepository
+import com.tempick.tempickserver.domain.repository.UserAuthRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -18,6 +23,8 @@ import org.springframework.transaction.annotation.Transactional
 class AdminPostService(
     private val postRepository: PostRepository,
     private val commentRepository: CommentRepository,
+    private val boardRepository: BoardRepository,
+    private val userAuthRepository: UserAuthRepository
 ) {
     @Transactional(readOnly = true)
     fun getPosts(page: Int, size: Int): CustomPage<AdminPostListItemResponse> {
@@ -32,6 +39,33 @@ class AdminPostService(
         val post = postRepository.findActivePost(postId)
             ?: throw CoreException(ErrorType.POST_NOT_FOUND)
         return AdminPostDetailResponse.from(post)
+    }
+
+    @Transactional
+    fun createPost(boardId: Long, request: AdminCreatePostRequest): AdminPostDetailResponse {
+        val adminUserId = AdminUser.getUserId()
+        val board = boardRepository.findById(boardId)
+            .orElseThrow { CoreException(ErrorType.BOARD_NOT_FOUND) }
+
+        val tag = if (request.tagName != null && request.tagColor != null) {
+            Tag(tagName = request.tagName, tagColor = request.tagColor)
+        } else {
+            null
+        }
+
+        val userAuth = userAuthRepository.findById(adminUserId!!).orElseThrow { CoreException(ErrorType.USER_NOT_FOUND) }
+
+        val post = Post(
+            board = board,
+            user = userAuth.user,
+            title = request.title,
+            content = request.content,
+            exposePriority = request.exposePriority,
+            tag = tag
+        )
+
+        val savedPost = postRepository.save(post)
+        return AdminPostDetailResponse.from(savedPost)
     }
 
     @Transactional(readOnly = true)
@@ -59,6 +93,13 @@ class AdminPostService(
             tagColor = request.tagColor,
         )
         return AdminPostDetailResponse.from(post)
+    }
+
+    @Transactional
+    fun deletePost(postId: Long) {
+        val post = postRepository.findActivePost(postId)
+            ?: throw CoreException(ErrorType.POST_NOT_FOUND)
+        post.delete()
     }
 
     @Transactional

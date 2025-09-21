@@ -1,5 +1,6 @@
 package com.tempick.tempickserver.api.rest.admin
 
+import com.tempick.tempickserver.api.rest.admin.dto.request.AdminCreatePostRequest
 import com.tempick.tempickserver.api.rest.admin.dto.respnose.AdminPostCommentResponse
 import com.tempick.tempickserver.api.rest.admin.dto.respnose.AdminPostDetailResponse
 import com.tempick.tempickserver.api.rest.admin.dto.respnose.AdminPostListItemResponse
@@ -66,6 +67,31 @@ class AdminPostController(
         return RestResponse.success(adminPostService.getPostDetail(postId))
     }
 
+    @PostMapping(
+        value = ["/admin/boards/{boardId}/posts"],
+        consumes = [MediaType.APPLICATION_JSON_VALUE],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
+    @Operation(
+        summary = "게시물 생성",
+        description = "특정 게시판에 게시물을 생성합니다."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "201",
+                description = "게시물 생성 성공",
+                content = [Content(schema = Schema(hidden = true))]
+            )
+        ]
+    )
+    fun createPost(
+        @PathVariable boardId: Long,
+        @RequestBody request: AdminCreatePostRequest
+    ): RestResponse<Any> {
+        return RestResponse.success(adminPostService.createPost(boardId, request))
+    }
+
     @GetMapping(
         value = ["/admin/post/{postId}/comments"],
         produces = [MediaType.APPLICATION_JSON_VALUE]
@@ -114,6 +140,30 @@ class AdminPostController(
         @RequestBody request: com.tempick.tempickserver.api.rest.admin.dto.request.AdminUpdatePostRequest
     ): RestResponse<AdminPostDetailResponse> {
         return RestResponse.success(adminPostService.updatePost(postId, request))
+    }
+
+    @DeleteMapping(
+        value = ["/admin/post/{postId}"],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
+    @Operation(
+        summary = "게시물 삭제",
+        description = "특정 게시물을 삭제(soft delete)합니다."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200",
+                description = "게시물 삭제 성공",
+                content = [Content(schema = Schema(hidden = true))]
+            )
+        ]
+    )
+    fun deletePost(
+        @PathVariable postId: Long,
+    ): RestResponse<Any> {
+        adminPostService.deletePost(postId)
+        return RestResponse.success()
     }
 
     @DeleteMapping(

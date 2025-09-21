@@ -18,7 +18,7 @@ data class PostResponse(
                 title = post.title,
                 content = post.content,
                 viewCount = post.viewCount,
-                author = post.author.nickname,
+                author = post.user.nickname,
                 createdAt = post.createdAt
             )
         }
