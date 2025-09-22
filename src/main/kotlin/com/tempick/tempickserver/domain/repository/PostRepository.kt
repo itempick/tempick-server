@@ -17,12 +17,12 @@ interface PostRepository : JpaRepository<Post, Long> {
     @Query("select p from Post p where p.id = :id and p.isDeleted = false")
     fun findActivePost(id: Long): Post?
 
-    @Query("SELECT DATE(p.createdAt) as date, COUNT(p.id) as count FROM Post p WHERE p.createdAt BETWEEN :startDate AND :endDate GROUP BY DATE(p.createdAt)")
+    @Query("SELECT DATE(p.createdAt) as date, COUNT(p.id) as count FROM Post p WHERE p.isDeleted = false AND p.createdAt BETWEEN :startDate AND :endDate GROUP BY DATE(p.createdAt)")
     fun findDailyPostCounts(@Param("startDate") startDate: LocalDateTime, @Param("endDate") endDate: LocalDateTime): List<Array<Any>>
 
-    @Query("SELECT FUNCTION('YEAR', p.createdAt) as year, FUNCTION('MONTH', p.createdAt) as month, COUNT(p.id) as count FROM Post p WHERE p.createdAt BETWEEN :startDate AND :endDate GROUP BY FUNCTION('YEAR', p.createdAt), FUNCTION('MONTH', p.createdAt)")
+    @Query("SELECT FUNCTION('YEAR', p.createdAt) as year, FUNCTION('MONTH', p.createdAt) as month, COUNT(p.id) as count FROM Post p WHERE p.isDeleted = false AND p.createdAt BETWEEN :startDate AND :endDate GROUP BY FUNCTION('YEAR', p.createdAt), FUNCTION('MONTH', p.createdAt)")
     fun findMonthlyPostCounts(@Param("startDate") startDate: LocalDateTime, @Param("endDate") endDate: LocalDateTime): List<Array<Any>>
 
-    @Query("SELECT p FROM Post p WHERE p.createdAt BETWEEN :startDate AND :endDate ORDER BY p.viewCount DESC")
+    @Query("SELECT p FROM Post p WHERE p.isDeleted = false AND p.createdAt BETWEEN :startDate AND :endDate ORDER BY p.viewCount DESC")
     fun findTop5ByViewCount(pageable: Pageable, @Param("startDate") startDate: LocalDateTime, @Param("endDate") endDate: LocalDateTime): List<Post>
 }
